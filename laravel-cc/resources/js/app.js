@@ -3,7 +3,6 @@ import { createApp } from "vue/dist/vue.esm-bundler";
 import { createRouter, createWebHistory } from "vue-router";
 
 import Products from "./components/Products.vue";
-import CreateProduct from "./components/CreateProduct.vue";
 
 const routes = [
     { path: "/products-spa", component: Products },
