@@ -4,9 +4,16 @@ namespace App\Console;
 
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
+use App\Console\Commands\CreateProductCommand;
+use App\Console\Commands\CustomSeederCommand;
 
 class Kernel extends ConsoleKernel
 {
+    protected $commands = [
+        // ... existing commands ...
+        CreateProductCommand::class,
+        CustomSeederCommand::class,
+    ];
     /**
      * Define the application's command schedule.
      */

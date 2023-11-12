@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('product_categories', function (Blueprint $table) {
+        Schema::create('category_product', function (Blueprint $table) {
             $table->unsignedBigInteger('product_id');
             $table->unsignedBigInteger('category_id');
             $table->timestamps();
@@ -28,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('product_categories');
+        Schema::dropIfExists('category_product');
     }
 };
