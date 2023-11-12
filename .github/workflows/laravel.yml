@@ -17,7 +17,7 @@ jobs:
         php-version: '8.2'
     - uses: actions/checkout@v3
     - name: go into project
-      run: cd laravel-cc
+      run: cd ./laravel-cc
     - name: Rmv Vendor
       run: rm -rf ./vendor
     - name: Copy .env
