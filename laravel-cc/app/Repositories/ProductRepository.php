@@ -9,22 +9,28 @@ use App\Services\CacheManager;
 class ProductRepository
 {
     protected $cacheManager;
+    private $eagerLoading;
 
-    public function __construct()
+    public function __construct($eagerLoading = false)
     {
         $this->cacheManager = new cacheManager;
+        $this->eagerLoading = $eagerLoading;
     }
 
     public function getAllProducts($categoryId = null, $sortByPrice = false, $order = 'asc'): Collection
     {
-
         if ($categoryId) {
             $productsCache = $this->cacheManager->get("products_$categoryId");
             if (!$productsCache) {
-                $products = Product::join('category_product', 'products.id', '=', 'category_product.product_id')
-                    ->where('category_product.category_id', $categoryId)
-                    ->select('products.*')
-                    ->get();
+                if($this->eagerLoading){
+                    $products = Product::with('categories')->get();
+                }else{
+                    $products = Product::join('category_product', 'products.id', '=', 'category_product.product_id')
+                        ->where('category_product.category_id', $categoryId)
+                        ->select('products.*')
+                        ->take(100)
+                        ->get();
+                }
 
                 $this->cacheManager->put("products_$categoryId", $products, 60);
             } else {
@@ -68,9 +74,10 @@ class ProductRepository
     {
 
         $product = Product::create($productData);
+        // dd(isset($productData['category_id']));die;
 
         // * Attach the category if provided
-        if ($productData['category_id']) {
+        if (isset($productData['category_id'])) {
             $product->categories()->sync($productData['category_id']);
         }
         $productId = $product->id;
