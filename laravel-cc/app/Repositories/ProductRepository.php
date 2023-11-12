@@ -4,25 +4,49 @@ namespace App\Repositories;
 
 use App\Models\Product;
 use Illuminate\Support\Collection;
-use Illuminate\Cache\CacheManager;
+use App\Services\CacheManager;
 
 class ProductRepository
 {
+    protected $cacheManager;
+
+    public function __construct()
+    {
+        $this->cacheManager = new cacheManager;
+    }
 
     public function getAllProducts($categoryId = null, $sortByPrice = false, $order = 'asc'): Collection
     {
-        $cacheManager = app(CacheManager::class);
 
         if ($categoryId) {
-            $products = Product::join('category_product', 'products.id', '=', 'category_product.product_id')
-                ->where('category_product.category_id', $categoryId)
-                ->select('products.*')
-                ->get();
+            $productsCache = $this->cacheManager->get("products_$categoryId");
+            if (!$productsCache) {
+                $products = Product::join('category_product', 'products.id', '=', 'category_product.product_id')
+                    ->where('category_product.category_id', $categoryId)
+                    ->select('products.*')
+                    ->get();
+
+                $this->cacheManager->put("products_$categoryId", $products, 60);
+            } else {
+                $products = $productsCache;
+            }
         } else {
-            $products = Product::all();
+            $productsCache = $this->cacheManager->get("products");
+            if (!$productsCache) {
+                $products = Product::orderBy('created_at', 'desc')->take(100)->get();
+                $this->cacheManager->put("products", $products, 60);
+            } else {
+                $products = $productsCache;
+            }
         }
         if ($sortByPrice) {
-            $products = $products->sortBy('price', $sortByPrice, $order);
+            $productsCaches = $this->cacheManager->get("products_$order" . "_price");
+            if (!$productsCaches) {
+                $productsCaches = $this->cacheManager->put("products_$order" . "_price", $products, 60);
+                $products = $productsCaches;
+            } else {
+                $products = $products->sortBy('price', $sortByPrice, $order);
+            }
         }
 
         return $products;
@@ -30,6 +54,13 @@ class ProductRepository
 
     public function getProductById(int $productId): Product
     {
+        $product = $this->cacheManager->get("product_$productId");
+
+        if (!$product) {
+            $product = Product::find($productId);
+
+            $this->cacheManager->put("product_$productId", $product, 60);
+        }
         return Product::findOrFail($productId);
     }
 
@@ -42,6 +73,9 @@ class ProductRepository
         if ($productData['category_id']) {
             $product->categories()->sync($productData['category_id']);
         }
+        $productId = $product->id;
+
+        $this->cacheManager->put("product_$productId", $product, 60);
 
         return $product;
     }
@@ -50,10 +84,15 @@ class ProductRepository
     {
         $product = Product::findOrFail($productId);
         $product->update($productData);
+        $productId = $product->id;
+        $this->cacheManager->put("product_$productId", $product, 60);
+
     }
 
     public function deleteProduct(int $productId): void
     {
         Product::findOrFail($productId)->delete();
+        $this->cacheManager->delete("product_$productId");
+
     }
 }

@@ -4,32 +4,71 @@ namespace App\Repositories;
 
 use App\Models\Category;
 use Illuminate\Support\Collection;
+use App\Services\CacheManager;
 
 class CategoryRepository
 {
+    protected $cacheManager;
+
+    public function __construct()
+    {
+        $this->cacheManager = new cacheManager;
+    }
+
     public function getAllCategories(): Collection
     {
-        return Category::all();
+        $categoriesCache = $this->cacheManager->get("categories");
+        if (!$categoriesCache) {
+            $categories = Category::all();
+            $categoriesCache = $this->cacheManager->put("categories", $categories, 60);
+        } else {
+            $categories = $categoriesCache;
+        }
+        return $categories;
     }
 
     public function getCategoryById(int $categoryId): Category
     {
-        return Category::findOrFail($categoryId);
+        $categoryCache = $this->cacheManager->get("categories_$categoryId");
+        if (!$categoryCache) {
+            $category = Category::findOrFail($categoryId);
+            $categoryCache = $this->cacheManager
+
+                ->put("categories_$categoryId", $category, 60);
+        } else {
+            $category = $categoryCache;
+        }
+
+        return $category;
     }
 
     public function createCategory(array $categoryData): Category
     {
-        return Category::create($categoryData);
+        $category = Category::create($categoryData);
+        $categoryId = $category->id;
+        $this->cacheManager
+
+            ->put("category_$categoryId", $category, 60);
+
+        return $category;
     }
 
     public function updateCategory(int $categoryId, array $categoryData): void
     {
         $category = Category::findOrFail($categoryId);
         $category->update($categoryData);
+        $categoryId = $category->id;
+
+        $this->cacheManager
+
+            ->put("category_$categoryId", $category, 60);
+
     }
 
     public function deleteCategory(int $categoryId): void
     {
         Category::findOrFail($categoryId)->delete();
+        $this->cacheManager->delete("category_$categoryId");
+
     }
 }
