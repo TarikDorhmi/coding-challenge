@@ -18,6 +18,8 @@ jobs:
     - uses: actions/checkout@v3
     - name: go into project
       run: cd laravel-cc
+    - name: Rmv Vendor
+      run: rm -rf ./vendor
     - name: Copy .env
       run: php -r "file_exists('.env') || copy('.env.example', '.env');"
     - name: Install Dependencies
