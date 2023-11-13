@@ -42,14 +42,14 @@ npm run dev
 php artisan serve
 ```
 
-### Run this command for create a new product from cli :
+### Run this command to create a new product from cli :
 ``` bash
 php artisan product:create {name} {description} {price}
 ```
 
 ### Implement a command to seed the DB with 1k categories and 1M products
 ``` bash
-php artisan db:seed:custom
+php artisan db:seed-custom
 ```
 
 ### Run this command for testing:
