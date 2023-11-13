@@ -3,9 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
-use Illuminate\Http\Request;
 use App\Services\CategoryService;
-
+use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
@@ -16,6 +15,7 @@ class CategoryController extends Controller
     {
         $categoryService = new CategoryService();
         $categories = $categoryService->getAllCategories();
+
         return view('web.categories.list', compact('categories'));
     }
 

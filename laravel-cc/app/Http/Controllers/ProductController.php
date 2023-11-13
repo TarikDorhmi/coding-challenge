@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
-use Illuminate\Http\Request;
-use App\Services\ProductService;
 use App\Services\CategoryService;
+use App\Services\ProductService;
+use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
@@ -16,15 +16,15 @@ class ProductController extends Controller
     {
         $categoryId = null;
         // * the set test is done only for the normal listing
-        if(isset($_GET['category_id'])){
+        if (isset($_GET['category_id'])) {
             $categoryId = $_GET['category_id'];
         }
         $sort = false;
-        if(isset($_GET['sort']) && !empty($_GET['sort'])){
+        if (isset($_GET['sort']) && !empty($_GET['sort'])) {
             $sort = true;
         }
-        $order = "asc";
-        if(isset($_GET['order']) ){
+        $order = 'asc';
+        if (isset($_GET['order'])) {
             $order = $_GET['order'];
         }
         $productService = new ProductService();
@@ -40,10 +40,12 @@ class ProductController extends Controller
 
         return view('web.products.list', compact(['products', 'categories']));
     }
+
     public function indexSPA()
     {
         return view('api.products.list');
     }
+
     /**
      * Show the form for creating a new resource.
      */
@@ -64,7 +66,7 @@ class ProductController extends Controller
             'name' => $request->input('name'),
             'description' => $request->input('description'),
             'price' => $request->input('price'),
-            'category_id' => $request->input('categories')
+            'category_id' => $request->input('categories'),
         ];
 
         // * Handle image upload if present
@@ -76,6 +78,7 @@ class ProductController extends Controller
         // *Instantiate the ProductService
         $productService = new ProductService();
         $product = $productService->createProduct($productData);
+
         return redirect()->route('products');
     }
 

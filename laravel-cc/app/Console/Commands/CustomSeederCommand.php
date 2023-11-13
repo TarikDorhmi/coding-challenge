@@ -2,8 +2,8 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
 use Faker\Generator as Faker;
+use Illuminate\Console\Command;
 
 class CustomSeederCommand extends Command
 {

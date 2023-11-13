@@ -3,8 +3,8 @@
 namespace App\Repositories;
 
 use App\Models\Category;
-use Illuminate\Support\Collection;
 use App\Services\CacheManager;
+use Illuminate\Support\Collection;
 
 class CategoryRepository
 {
@@ -17,13 +17,14 @@ class CategoryRepository
 
     public function getAllCategories(): Collection
     {
-        $categoriesCache = $this->cacheManager->get("categories");
+        $categoriesCache = $this->cacheManager->get('categories');
         if (!$categoriesCache) {
             $categories = Category::all();
-            $categoriesCache = $this->cacheManager->put("categories", $categories, 60);
+            $categoriesCache = $this->cacheManager->put('categories', $categories, 60);
         } else {
             $categories = $categoriesCache;
         }
+
         return $categories;
     }
 

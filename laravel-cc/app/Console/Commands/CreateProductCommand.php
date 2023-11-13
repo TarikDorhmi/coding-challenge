@@ -2,8 +2,8 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
 use App\Services\ProductService;
+use Illuminate\Console\Command;
 
 class CreateProductCommand extends Command
 {

@@ -1,9 +1,8 @@
 <?php
 
+use App\Http\Controllers\ProductController;
 use Illuminate\Support\Facades\Route;
 
-use App\Http\Controllers\ProductController;
-use App\Http\Controllers\CategoryController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -21,7 +20,7 @@ Route::get('/', function () {
 
 Route::get('/products', [ProductController::class, 'index'])->name('products');
 Route::get('/products/create', [ProductController::class, 'create'])->name('products.create');
-Route::post('/products',ProductController::class . '@store')->name('product.store');
+Route::post('/products', ProductController::class . '@store')->name('product.store');
 
 Route::get('/products-spa', [ProductController::class, 'indexSPA'])->name('products-spa');
 // Route::get('/products-spa/create', [ProductController::class, 'CreateSPA'])->name('products-spa');

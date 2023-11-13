@@ -20,7 +20,8 @@ class CategoryService
         return $this->categoryRepository->createCategory($categoryData);
     }
 
-    public function getAllCategories(){
+    public function getAllCategories()
+    {
         return $this->categoryRepository->getAllCategories();
     }
 }

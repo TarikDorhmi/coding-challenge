@@ -5,9 +5,6 @@ namespace App\Services;
 use App\Models\Product;
 use App\Repositories\ProductRepository;
 
-use App\Services\FileManagerService;
-use App\Services\ProductValidationService;
-
 class ProductService
 {
     private $productRepository;
