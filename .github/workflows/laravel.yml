@@ -18,6 +18,8 @@ jobs:
     - uses: actions/checkout@v3
     - name: echo path
       run: pwd
+    - name: echo list folder
+      run: ls -lisat
     - name: go into project
       run: cd ../laravel-cc
     - name: Rmv Vendor
