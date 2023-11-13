@@ -9,6 +9,14 @@ use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
+    private $categoryService;
+    private $productService;
+
+    public function __construct(CategoryService $categoryService, ProductService $productService)
+    {
+        $this->categoryService = $categoryService;
+        $this->productService = $productService;
+    }
     /**
      * Display a listing of the resource.
      */
@@ -27,16 +35,15 @@ class ProductController extends Controller
         if (isset($_GET['order'])) {
             $order = $_GET['order'];
         }
-        $productService = new ProductService();
-        $products = $productService
+
+        $products = $this->productService
             ->getAllProducts(
                 $categoryId,
                 $sort,
                 $order
             );
 
-        $categoryService = new CategoryService();
-        $categories = $categoryService->getAllCategories();
+        $categories = $this->categoryService->getAllCategories();
 
         return view('web.products.list', compact(['products', 'categories']));
     }
@@ -51,8 +58,7 @@ class ProductController extends Controller
      */
     public function create()
     {
-        $categoryService = new CategoryService();
-        $categories = $categoryService->getAllCategories();
+        $categories = $this->categoryService->getAllCategories();
 
         return view('web.products.create', compact('categories'));
     }
@@ -75,9 +81,7 @@ class ProductController extends Controller
             $request->file('image')->storeAs('public/products', $imageFileName);
             $productData['image'] = $imageFileName;
         }
-        // *Instantiate the ProductService
-        $productService = new ProductService();
-        $product = $productService->createProduct($productData);
+        $product = $this->productService->createProduct($productData);
 
         return redirect()->route('products');
     }

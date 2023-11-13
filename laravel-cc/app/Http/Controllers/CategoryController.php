@@ -8,13 +8,18 @@ use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
+    private $categoryService;
+
+    public function __construct(CategoryService $categoryService)
+    {
+        $this->categoryService = $categoryService;
+    }
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $categoryService = new CategoryService();
-        $categories = $categoryService->getAllCategories();
+        $categories = $this->categoryService->getAllCategories();
 
         return view('web.categories.list', compact('categories'));
     }

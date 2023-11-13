@@ -4,6 +4,8 @@ namespace App\Services;
 
 use App\Models\Product;
 use App\Repositories\ProductRepository;
+use App\Services\FileManagerService;
+use App\Services\ProductValidationService;
 
 class ProductService
 {
@@ -11,11 +13,11 @@ class ProductService
     private $fileManagerService;
     private $productValidationService;
 
-    public function __construct()
+    public function __construct(ProductRepository $productRepository, FileManagerService $fileManagerService, ProductValidationService $productValidationService)
     {
-        $this->productRepository = new ProductRepository;
-        $this->fileManagerService = new FileManagerService;
-        $this->productValidationService = new ProductValidationService;
+        $this->productRepository = $productRepository;
+        $this->fileManagerService = $fileManagerService;
+        $this->productValidationService = $productValidationService;
     }
 
     public function createProduct(array $productData): Product

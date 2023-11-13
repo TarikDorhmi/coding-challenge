@@ -10,9 +10,9 @@ class CategoryRepository
 {
     protected $cacheManager;
 
-    public function __construct()
+    public function __construct(CacheManager $cacheManager)
     {
-        $this->cacheManager = new cacheManager;
+        $this->cacheManager = $cacheManager;
     }
 
     public function getAllCategories(): Collection
@@ -61,15 +61,12 @@ class CategoryRepository
         $categoryId = $category->id;
 
         $this->cacheManager
-
             ->put("category_$categoryId", $category, 60);
-
     }
 
     public function deleteCategory(int $categoryId): void
     {
         Category::findOrFail($categoryId)->delete();
         $this->cacheManager->delete("category_$categoryId");
-
     }
 }

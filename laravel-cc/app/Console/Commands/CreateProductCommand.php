@@ -7,11 +7,16 @@ use Illuminate\Console\Command;
 
 class CreateProductCommand extends Command
 {
+    private $productService;
     protected $signature = 'product:create {name} {description} {price}';
 
     protected $description = 'Create a new product';
 
-    public function handle(ProductService $productService)
+    public function __contruct(ProductService $productService){
+        $this->productService = $productService;
+    }
+
+    public function handle()
     {
         $productData = [
             'name' => $this->argument('name'),
@@ -19,7 +24,7 @@ class CreateProductCommand extends Command
             'price' => $this->argument('price'),
         ];
 
-        $product = $productService->createProduct($productData);
+        $product = $this->productService->createProduct($productData);
 
         if ($product) {
             $this->info('Product created successfully.');

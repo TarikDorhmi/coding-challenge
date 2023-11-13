@@ -8,9 +8,9 @@ class CacheManager
 {
     protected $cache;
 
-    public function __construct()
+    public function __construct(Cache $cache)
     {
-        $this->cache = new Cache;
+        $this->cache = $cache;
     }
 
     public function get($key)
