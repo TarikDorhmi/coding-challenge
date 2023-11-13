@@ -22,6 +22,8 @@ jobs:
       run: ls -lisat
     - name: go into project
       run: cd laravel-cc
+    - name: echo list project
+      run: ls -lisat
     - name: Rmv Vendor
       run: rm -rf ./vendor
     - name: Copy .env
