@@ -19,10 +19,6 @@ jobs:
         with:
           php-version: "8.2"
       - uses: actions/checkout@v3
-      - name: echo path
-        run: pwd
-      - name: echo list folder
-        run: ls -lisat
       - name: Rmv Vendor
         run: rm -rf ./vendor
       - name: Copy .env
