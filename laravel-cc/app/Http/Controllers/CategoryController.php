@@ -14,6 +14,7 @@ class CategoryController extends Controller
     {
         $this->categoryService = $categoryService;
     }
+
     /**
      * Display a listing of the resource.
      */

@@ -12,7 +12,8 @@ class CreateProductCommand extends Command
 
     protected $description = 'Create a new product';
 
-    public function __contruct(ProductService $productService){
+    public function __contruct(ProductService $productService)
+    {
         $this->productService = $productService;
     }
 

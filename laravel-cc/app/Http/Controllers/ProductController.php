@@ -17,6 +17,7 @@ class ProductController extends Controller
         $this->categoryService = $categoryService;
         $this->productService = $productService;
     }
+
     /**
      * Display a listing of the resource.
      */
